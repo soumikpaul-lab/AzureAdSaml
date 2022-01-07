@@ -1,0 +1,31 @@
+﻿@using System.Security.Claims
+
+@if (Request.IsAuthenticated)
+{
+    <text>
+        <ul class="nav navbar-nav navbar-right">
+                <li class="navbar-text">
+                    @if (User.Identity.Name != null)
+                    {
+                        var claims = ClaimsPrincipal.Current.Identities.First().Claims.ToList();
+                        var givenName = claims?.FirstOrDefault(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", StringComparison.OrdinalIgnoreCase))?.Value;
+                        <text>Hello, @givenName!</text>
+                    }
+                    else
+                    {
+                        <text>Hello</text>
+                    }
+                </li>
+            <li>
+                @Html.ActionLink("Sign out", "SignOut", "Account")
+            </li>
+        </ul>
+    </text>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
+
